@@ -1,55 +1,34 @@
-# Prerequisites
-*.d
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-# Linker output
-*.ilk
-*.map
-*.exp
+int led = 13;
+int tem = A1;
+int sensor;
 
-# Precompiled Headers
-*.gch
-*.pch
+void setup() {
+  pinMode(led, OUTPUT);
+  pinMode(tem, INPUT);
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
+  lcd.init();
+  lcd.backlight();
+}
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
+void loop() {
+  sensor = analogRead(tem);
 
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Temp Value:");
+  lcd.setCursor(0, 1);
+  lcd.print(sensor);
 
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
+  if (sensor > 500) {
+    digitalWrite(led, HIGH);
+  } else {
+    digitalWrite(led, LOW);
+  }
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
-
-# debug information files
-*.dwo
+  delay(500);
+}
